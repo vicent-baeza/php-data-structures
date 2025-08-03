@@ -1,0 +1,16 @@
+{
+    "name": "vicent/data-structures",
+    "description": "PHP implementation of many data structures.",
+    "autoload": {
+        "psr-4": {
+            "Vicent\\DataStructures\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Vicent Baeza",
+            "email": "vicentbaeza7@gmail.com"
+        }
+    ],
+    "require": {}
+}
