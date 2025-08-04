@@ -56,7 +56,7 @@ class UnionFindTest extends TestCase {
         $uf->union(0,4);
         $this->assertEquals($uf->find(1), $uf->find(2));
         $this->assertEquals($uf->find(1), $uf->find(3));
-        $this->assertEquals($uf->find(2), $uf->find(2));
+        $this->assertEquals($uf->find(2), $uf->find(3));
         $this->assertEquals($uf->find(0), $uf->find(4));
         $this->assertTrue($uf->sameSet(1, 2));
         $this->assertTrue($uf->sameSet(1, 3));

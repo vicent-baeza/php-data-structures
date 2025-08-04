@@ -80,11 +80,11 @@ class UnionFind implements \IteratorAggregate, \Countable, \ArrayAccess, \String
 
     /** Unites all the sets that contain the given elements */
     public function unionMany(array $elements) {
-        $elements = array_values($this->findMany($elements));
+        $elements = array_values($elements);
         shuffle($elements);
         $n = count($elements);
         for($i = 1; $i < $n; $i++)
-            $this->_link($elements[$i], $elements[$i-1]);
+            $this->union($elements[$i], $elements[$i-1]);
     }
 
     /** Checks if an element exists in this UnionFind. */
