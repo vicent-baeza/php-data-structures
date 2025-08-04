@@ -5,9 +5,8 @@ namespace Vicent;
  * Union-Find (Disjoint-Set) implementation with path compression.
  * O(α(n)) time complexity for union() and find(). 
  */
-
 class UnionFind implements \IteratorAggregate, \Countable, \ArrayAccess, \Stringable {
-    public $parent = [];
+    protected $parent = [];
 
     /**
      * Constructs a new UnionFind. If a parent is not specified, then each element will be added in a new set.
