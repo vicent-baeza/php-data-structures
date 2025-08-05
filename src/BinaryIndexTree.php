@@ -17,11 +17,11 @@ class BinaryIndexTreeIterator implements \Iterator {
  * O(log n) time complexity for update(), set(), sum(), prefixSum() and add(). 
  */
 class BinaryIndexTree implements \IteratorAggregate, \Countable, \ArrayAccess, \Stringable {
-    protected $array = [0];
+    protected $data = [0];
 
     public function __construct(int $elements = 0) {
         for($i = 0; $i < $elements; $i++)
-            $this->array[] = 0;
+            $this->data[] = 0;
     }
 
     /** Creates a BinaryIndexTree from another BinaryIndexTree, copying it. */
@@ -29,7 +29,7 @@ class BinaryIndexTree implements \IteratorAggregate, \Countable, \ArrayAccess, \
         $n = $other->count();
         $bit = new BinaryIndexTree($n);
         for($i = 1; $i <= $n; $i++)
-            $bit->array[$i] = $other->array[$i];
+            $bit->data[$i] = $other->data[$i];
         return $bit;
     }
 
@@ -45,7 +45,7 @@ class BinaryIndexTree implements \IteratorAggregate, \Countable, \ArrayAccess, \
     public function prefixSum(int $idx): int|float {
         $result = 0;
         while ($idx > 0) {
-            $result += $this->array[$idx];
+            $result += $this->data[$idx];
             $idx -= $idx & -$idx;
         }
         return $result;
@@ -72,16 +72,16 @@ class BinaryIndexTree implements \IteratorAggregate, \Countable, \ArrayAccess, \
     /** Updates the value stored at $idx, adding $val to it. */
     public function update(int $idx, int|float $val) {
         $idx++;
-        $n = count($this->array);
+        $n = count($this->data);
         while($idx < $n) {
-            $this->array[$idx] += $val;
+            $this->data[$idx] += $val;
             $idx += $idx & -$idx;
         }
     }
 
     /** Returns the amount of elements in this BinaryIndexTree. */
     public function count(): int {
-        return count($this->array) - 1;
+        return count($this->data) - 1;
     }
 
     /** Sets the value of an element. */
@@ -93,7 +93,7 @@ class BinaryIndexTree implements \IteratorAggregate, \Countable, \ArrayAccess, \
 
     /** Appends a new element to the end of the BinaryIndexTree with a specific value. */
     public function add(int|float $newVal) {
-        $this->array[] = 0;
+        $this->data[] = 0;
         $this->set($this->count()-1, $newVal);
     }
 
