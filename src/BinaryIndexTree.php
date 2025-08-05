@@ -1,6 +1,17 @@
 <?php
 namespace Vicent;
 
+class BinaryIndexTreeIterator implements \Iterator {
+    private $bit = null;
+    private $index = 0;
+    public function __construct(BinaryIndexTree $bit) { $this->bit = $bit; }
+    public function current(): int|float { return $this->bit->get($this->index); }
+    public function next(): void { $this->index++; }
+    public function key(): int { return $this->index; }
+    public function valid(): bool { return $this->index >= 0 && $this->index < $this->bit->count(); }
+    public function rewind(): void { $this->index = 0; }
+}
+
 /**
  * Binary Index Tree (Fenwick Tree) implementation with range updates and queries.
  * O(log n) time complexity for update(), set(), sum(), prefixSum() and add(). 
@@ -112,31 +123,6 @@ class BinaryIndexTree implements \IteratorAggregate, \Countable, \ArrayAccess, \
         $this->set($offset, $value);
     }
     public function offsetUnset(mixed $offset): void {
-        throw new \InvalidArgumentException("Unsupported opperation, values can't be removed from a BinaryIndexTree.");
-    }
-}
-
-class BinaryIndexTreeIterator implements \Iterator {
-    private $bit = null;
-    private $index = 0;
-
-    public function __construct(BinaryIndexTree $bit) {
-        $this->bit = $bit;
-    }
-    
-    public function current(): int|float {
-        return $this->bit->get($this->index);
-    }
-    public function next(): void {
-        $this->index++;
-    }
-    public function key(): int {
-        return $this->index;
-    }
-    public function valid(): bool {
-        return $this->index >= 0 && $this->index < $this->bit->count();
-    }
-    public function rewind(): void {
-        $this->index = 0;
+        throw new \InvalidArgumentException("Unsupported operation, values can't be removed from a BinaryIndexTree.");
     }
 }
