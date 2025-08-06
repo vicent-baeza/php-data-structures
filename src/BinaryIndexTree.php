@@ -25,17 +25,17 @@ class BinaryIndexTree implements \IteratorAggregate, \Countable, \ArrayAccess, \
     }
 
     /** Creates a BinaryIndexTree from another BinaryIndexTree, copying it. */
-    public static function fromObject(BinaryIndexTree $other): BinaryIndexTree {
+    public static function fromObject(BinaryIndexTree $other): static {
         $n = $other->count();
-        $bit = new BinaryIndexTree($n);
+        $bit = new static($n);
         for($i = 1; $i <= $n; $i++)
             $bit->data[$i] = $other->data[$i];
         return $bit;
     }
 
     /** Creates a BinaryIndexTree from a sequence of values */
-    public static function fromValues(array|\Traversable $values) {
-        $bit = new BinaryIndexTree();
+    public static function fromValues(array|\Traversable $values): static {
+        $bit = new static();
         foreach($values as $value)
             $bit->add($value);
         return $bit;
