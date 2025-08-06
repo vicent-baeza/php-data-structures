@@ -15,14 +15,24 @@ class SegmentTreeIterator implements \Iterator {
 /**
  * Segment Tree implementation with point updates & range queries.
  * O(log n) time complexity for set() & query().
- * This abstract class requires that the functions startValue() and operation() be implemented. See MinSegmentTree, MaxSegmentTree, SumSegmentTree & ProductSegmentTree for examples.
+ * This abstract class requires that the functions startValue() and operation() be implemented in a child class. See MinSegmentTree, MaxSegmentTree, SumSegmentTree & ProductSegmentTree for examples.
  */
 abstract class SegmentTree implements \IteratorAggregate, \Countable, \ArrayAccess, \Stringable {
     protected $data;
 
+    /** 
+     * The value returned if a 0-length (or negative-length) segment is queried. 
+     * It must be a value where operation() of it and any other value returns the other value, such that operation(x,V) = operation(V,x) = x for all x.
+     * See MinSegmentTree, MaxSegmentTree, SumSegmentTree & ProductSegmentTree for examples. 
+     */
     public static abstract function startValue(): mixed;
+    /**
+     * The operation that it being queried. Can be non-commutative, but must have a neutral value (ie, a value V such that operation(x,V) = operation(V,x) = x for all x).
+     * This method must be implemented in a child class in order to use the structure, see MinSegmentTree, MaxSegmentTree, SumSegmentTree & ProductSegmentTree for examples. 
+     */
     public static abstract function operation(mixed $a, mixed $b): mixed;
 
+    /** Constructs a new SegmentTree from an array of values. */
     public function __construct(array $values) {
         $n = count($values);
         $this->data = array_fill(0, 2*$n, 0);
@@ -32,14 +42,22 @@ abstract class SegmentTree implements \IteratorAggregate, \Countable, \ArrayAcce
             $this->data[$i] = $this->operation($this->data[2*$i], $this->data[2*$i+1]);
     }
 
+    /** Creates a Segment Tree that contains N equal elements. */
+    public static function fromCount(int $numberOfElements, mixed $element): static {
+        return new static(array_fill(0, $numberOfElements, $element));
+    } 
+
+    /** The number of elements in this Segment Tree. */
     public function count(): int {
         return intdiv(count($this->data), 2);
     }
 
+    /** Obtains the value of 1 element at a given index. */
     public function get(int $idx): mixed {
         return $this->data[$idx + $this->count()];
     }
 
+    /** Gets all the values stored in this segment tree, in order. */
     public function getAll(): array {
         $array = [];
         $n = $this->count();
@@ -48,6 +66,7 @@ abstract class SegmentTree implements \IteratorAggregate, \Countable, \ArrayAcce
         return $array;
     }
 
+    /** Sets the value of a specific element. */
     public function set(int $idx, mixed $value) {
         $idx += $this->count();
         $this->data[$idx] = $value;
@@ -57,10 +76,11 @@ abstract class SegmentTree implements \IteratorAggregate, \Countable, \ArrayAcce
         }
     }
 
-    public function query(int $l, int $r): mixed {
+    /** Computes the value that would be returned after applying the operation  */
+    public function query(int $l, int $r, mixed $startValue = null): mixed {
         $l += $this->count();
         $r += $this->count();
-        $result = $this->startValue();
+        $result = isset($startValue) ? $startValue : $this->startValue();
         while($l < $r) {
             if($l % 2 == 1) {
                 $result = $this->operation($result, $this->data[$l]);
